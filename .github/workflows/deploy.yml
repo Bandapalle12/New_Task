@@ -1,0 +1,48 @@
+name: Deploy Terraform to AWS
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+    inputs:
+      destroy:
+        description: "Destroy infrastructure?"
+        required: false
+        default: "false"
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    environment: production     # Enables manual approval before APPLY and DESTROY
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        if: ${{ github.event.inputs.destroy != 'true' }}
+        run: terraform plan -out=tfplan
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Terraform Apply (manual approval via environment)
+        if: ${{ github.event.inputs.destroy != 'true' }}
+        run: terraform apply -auto-approve tfplan
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Terraform Destroy (manual approval via environment)
+        if: ${{ github.event.inputs.destroy == 'true' }}
+        run: terraform destroy -auto-approve
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
