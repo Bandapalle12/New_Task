@@ -1,11 +1,9 @@
-FROM python:3.9-slim
-
+FROM python:3.9
 WORKDIR /app
 
-COPY app.py /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-RUN pip install flask mysql-connector-python
-
-EXPOSE 5000
+COPY app.py .
 
 CMD ["python", "app.py"]
