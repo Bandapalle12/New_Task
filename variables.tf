@@ -34,12 +34,6 @@ variable "instance_type" {
   default     = "t2.micro" # free-tier eligible
 }
 
-variable "key_pair_name" {
-  description = "Key pair name for SSH access"
-  type        = string
-  default     = "my-key"
-}
-
 variable "ecs_ami_id" {
   description = "ECS-optimized AMI ID"
   type        = string

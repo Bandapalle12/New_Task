@@ -1,14 +1,8 @@
-############################################
-# PROVIDERS
-############################################
 provider "aws" {
   region = var.aws_region
 }
 
-############################################
-# DATA SOURCES (Default VPC + Subnets)
-############################################
-# Use default VPC (free-tier & simplest)
+
 data "aws_vpc" "default" {
   default = true
 }
@@ -20,17 +14,13 @@ data "aws_subnets" "default_public" {
   }
 }
 
-############################################
-# LOCALS
-############################################
+
 locals {
   vpc_id        = data.aws_vpc.default.id
   public_subnets = data.aws_subnets.default_public.ids
 }
 
-############################################
-# MODULE: EC2 Instance for ECS Cluster
-############################################
+
 module "ec2" {
   source = "./ec2"
 
@@ -43,9 +33,7 @@ module "ec2" {
   project_name   = var.project_name
 }
 
-############################################
-# MODULE: ECS Cluster + Task + Service
-############################################
+
 module "ecs" {
   source = "./ecs"
 
@@ -57,9 +45,7 @@ module "ecs" {
   ecs_instance_id = module.ec2.ecs_instance_id
 }
 
-############################################
-# MODULE: RDS Database
-############################################
+
 module "rds" {
   source = "./rds"
 
@@ -74,9 +60,7 @@ module "rds" {
   vpc_id = local.vpc_id
 }
 
-############################################
-# MODULE: Route 53 DNS → EC2 Instance
-############################################
+
 module "route53" {
   source = "./route53"
 
@@ -87,17 +71,3 @@ module "route53" {
   ec2_public_ip = module.ec2.ecs_public_ip
 }
 
-############################################
-# OUTPUTS
-############################################
-output "app_url" {
-  value = "http://${var.subdomain}.${var.domain_name}"
-}
-
-output "ec2_public_ip" {
-  value = module.ec2.ecs_public_ip
-}
-
-output "rds_endpoint" {
-  value = module.rds.rds_endpoint
-}
