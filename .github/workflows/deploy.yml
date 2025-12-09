@@ -41,7 +41,6 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
-        working-directory: project
         run: terraform init
 
       - name: Terraform Plan
