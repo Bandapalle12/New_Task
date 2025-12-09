@@ -12,3 +12,5 @@ resource "aws_route53_record" "ecs_dns" {
   # IP of EC2 instance passed from main.tf
   records = [var.ec2_public_ip]
 }
+
+
