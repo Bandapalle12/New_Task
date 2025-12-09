@@ -9,3 +9,8 @@ variable "subdomain" {
   type        = string
   default     = "app"
 }
+
+variable "ec2_public_ip" {
+  description = "Public IP of EC2 instance"
+  type        = string
+}
