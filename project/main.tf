@@ -56,7 +56,6 @@ module "rds" {
 
   project_name          = var.project_name
   rds_engine            = var.rds_engine
-  rds_engine_version    = var.rds_engine_version
   rds_instance_class    = var.rds_instance_class
   rds_allocated_storage = var.rds_allocated_storage
   rds_username          = var.rds_username
