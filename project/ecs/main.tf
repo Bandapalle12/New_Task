@@ -6,20 +6,21 @@ resource "aws_ecs_task_definition" "hello_task" {
   family                   = "${var.project_name}-task"
   requires_compatibilities = ["EC2"]
   network_mode             = "bridge"
+  cpu                      = "256"
+  memory                   = "512"
 
-  container_definitions = jsonencode([
-    {
-      name      = "hello-world"
-      image     = var.docker_image
-      essential = true
-      portMappings = [
-        {
-          containerPort = var.app_port
-          hostPort      = var.app_port
-        }
-      ]
-    }
-  ])
+  container_definitions = jsonencode([{
+    name             = "hello-world"
+    image            = var.docker_image
+    essential        = true
+    memory           = 256        # Required FIX
+    memoryReservation = 128        # Optional but recommended
+
+    portMappings = [{
+      containerPort = var.app_port
+      hostPort      = var.app_port
+    }]
+  }])
 }
 
 resource "aws_ecs_service" "ecs_service" {
@@ -27,6 +28,7 @@ resource "aws_ecs_service" "ecs_service" {
   cluster         = aws_ecs_cluster.ecs_cluster.id
   task_definition = aws_ecs_task_definition.hello_task.arn
   desired_count   = 1
-
-  launch_type = "EC2"
+  launch_type     = "EC2"
 }
+
+
