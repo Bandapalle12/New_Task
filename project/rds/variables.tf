@@ -10,12 +10,6 @@ variable "rds_engine" {
   default     = "mysql"
 }
 
-variable "rds_engine_version" {
-  description = "Database Engine Version"
-  type        = string
-  default     = "8.0.33"
-}
-
 variable "rds_instance_class" {
   description = "RDS Instance Class (Free Tier eligible)"
   type        = string
