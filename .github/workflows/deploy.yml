@@ -13,7 +13,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production   # Triggers manual approval before Apply/Destroy
+    environment: production
 
     steps:
       - name: Checkout repo
@@ -41,10 +41,12 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform Init
+        working-directory: project
         run: terraform init
 
       - name: Terraform Plan
         if: ${{ github.event.inputs.destroy != 'true' }}
+        working-directory: project
         run: terraform plan -out=tfplan
         env:
           TF_VAR_docker_image: ${{ secrets.DOCKERHUB_USERNAME }}/hello-world:latest
@@ -52,10 +54,11 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       # -------------------------
-      # Step 3: Terraform Apply (manual approval)
+      # Step 3: Terraform Apply
       # -------------------------
       - name: Terraform Apply
         if: ${{ github.event.inputs.destroy != 'true' }}
+        working-directory: project
         run: terraform apply -auto-approve tfplan
         env:
           TF_VAR_docker_image: ${{ secrets.DOCKERHUB_USERNAME }}/hello-world:latest
@@ -63,10 +66,11 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       # -------------------------
-      # Step 4: Terraform Destroy (manual approval)
+      # Step 4: Terraform Destroy
       # -------------------------
       - name: Terraform Destroy
         if: ${{ github.event.inputs.destroy == 'true' }}
+        working-directory: project
         run: terraform destroy -auto-approve
         env:
           TF_VAR_docker_image: ${{ secrets.DOCKERHUB_USERNAME }}/hello-world:latest
