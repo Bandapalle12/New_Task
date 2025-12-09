@@ -1,7 +1,7 @@
 variable "domain_name" {
   description = "Hosted Zone domain name"
   type        = string
-  default     = "example.com"
+  default     = "example1.com"
 }
 
 variable "subdomain" {
