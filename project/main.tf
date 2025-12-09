@@ -32,8 +32,7 @@ module "ec2" {
 
   instance_type  = var.instance_type
   project_name   = var.project_name
-
-  
+  vpc_id         = local.vpc_id        # <-- required by EC2 module
   public_subnets = local.public_subnets
 }
 
@@ -43,11 +42,10 @@ module "ec2" {
 module "ecs" {
   source = "./ecs"
 
-  project_name = var.project_name
-  docker_image = var.docker_image
-  app_port     = var.app_port
+  project_name    = var.project_name
+  docker_image    = var.docker_image
+  app_port        = var.app_port
 
-  # ECS should depend on EC2 instance output
 }
 
 #######################################
@@ -72,8 +70,9 @@ module "rds" {
 module "route53" {
   source = "./route53"
 
-  domain_name = var.domain_name
-  subdomain   = var.subdomain
+  domain_name   = var.domain_name
+  subdomain     = var.subdomain
 
-
+  # Pass the public IP from EC2 module output
+  ec2_public_ip = module.ec2.public_ip
 }

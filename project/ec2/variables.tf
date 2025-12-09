@@ -10,6 +10,11 @@ variable "public_subnets" {
   default     = [] # fill using data sources for default VPC
 }
 
+variable "vpc_id" {
+  description = "VPC ID where EC2 instances will be launched"
+  type        = string
+}
+
 variable "instance_type" {
   description = "EC2 instance type for ECS cluster"
   type        = string

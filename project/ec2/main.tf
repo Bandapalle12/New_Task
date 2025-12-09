@@ -9,6 +9,7 @@ data "aws_ami" "ecs" {
 }
 
 resource "aws_instance" "ecs_instance" {
+  count         = 1
   ami           = data.aws_ami.ecs.id
   instance_type = var.instance_type
   subnet_id     = var.public_subnets[0]
