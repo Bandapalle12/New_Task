@@ -8,8 +8,5 @@ resource "aws_route53_record" "ecs_dns" {
   name    = "${var.subdomain}.${var.domain_name}"
   type    = "A"
   ttl     = 300
-
-  records = [
-    aws_instance.ecs_instance.public_ip
-  ]
+  
 }
