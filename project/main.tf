@@ -31,10 +31,9 @@ module "ec2" {
   source = "./ec2"
 
   instance_type  = var.instance_type
-  key_pair_name  = var.key_pair_name
   project_name   = var.project_name
 
-  vpc_id         = local.vpc_id
+  
   public_subnets = local.public_subnets
 }
 
@@ -48,9 +47,7 @@ module "ecs" {
   docker_image = var.docker_image
   app_port     = var.app_port
 
-  # ECS should NOT depend on EC2 AMI directly unless required
-  # If your ECS cluster runs on EC2, pass instance ID from EC2 module
-  ecs_instance_id = module.ec2.instance_id
+  # ECS should depend on EC2 instance output
 }
 
 #######################################
@@ -67,7 +64,6 @@ module "rds" {
   rds_username          = var.rds_username
   rds_password          = var.rds_password
 
-  vpc_id = local.vpc_id
 }
 
 #######################################
@@ -79,6 +75,5 @@ module "route53" {
   domain_name = var.domain_name
   subdomain   = var.subdomain
 
-  # Public IP of EC2 instance created in EC2 module
-  ec2_public_ip = module.ec2.public_ip
+
 }
