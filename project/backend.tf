@@ -3,7 +3,7 @@ terraform {
     bucket         = "terraform-state-backend-new"
     key            = "three-tier-demo"
     region         = "us-east-1"
-    dynamodb_table = "terraform-locks"
+    dynamodb_table = "lock-state"
     encrypt        = true
   }
 }
