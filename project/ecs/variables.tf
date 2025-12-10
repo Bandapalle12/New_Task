@@ -13,6 +13,18 @@ variable "docker_image" {
 variable "app_port" {
   description = "App container port"
   type        = number
-  default     = 5000
+  default     = 3000
 }
 
+variable "rds_username" {
+  type = string
+}
+
+variable "rds_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "rds_host" {
+  type = string
+}

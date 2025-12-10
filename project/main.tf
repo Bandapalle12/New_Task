@@ -36,6 +36,11 @@ module "ecs" {
   docker_image    = var.docker_image
   app_port        = var.app_port
 
+  rds_username = var.rds_username
+  rds_password = var.rds_password
+  rds_host = module.rds.db_endpoint
+
+
 }
 
 module "rds" {

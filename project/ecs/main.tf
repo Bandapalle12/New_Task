@@ -13,8 +13,23 @@ resource "aws_ecs_task_definition" "hello_task" {
     name             = "hello-world"
     image            = var.docker_image
     essential        = true
-    memory           = 256        # Required FIX
-    memoryReservation = 128        # Optional but recommended
+    memory           = 256
+    memoryReservation = 128
+
+    environment = [
+      {
+        name  = "RDS_HOST"
+        value = module.rds.db_endpoint
+      },
+      {
+        name  = "username"
+        value = var.rds_username
+      },
+      {
+        name  = "password"
+        value = var.rds_password
+      }
+    ]
 
     portMappings = [{
       containerPort = var.app_port
@@ -22,6 +37,7 @@ resource "aws_ecs_task_definition" "hello_task" {
     }]
   }])
 }
+
 
 resource "aws_ecs_service" "ecs_service" {
   name            = "${var.project_name}-service"
