@@ -1,6 +1,4 @@
-#############################
-# GLOBAL VARIABLES
-#############################
+
 variable "project_name" {
   description = "Project name prefix"
   type        = string
@@ -25,9 +23,6 @@ variable "public_subnets" {
   default     = [] # fill using data sources for default VPC
 }
 
-#############################
-# EC2 + ECS CLUSTER VARIABLES
-#############################
 variable "instance_type" {
   description = "EC2 instance type for ECS cluster"
   type        = string
@@ -46,9 +41,6 @@ variable "desired_capacity" {
   default     = 1
 }
 
-#############################
-# DOCKER APP VARIABLES
-#############################
 variable "docker_image" {
   description = "Docker image for ECS service"
   type        = string
@@ -58,12 +50,9 @@ variable "docker_image" {
 variable "app_port" {
   description = "App container port"
   type        = number
-  default     = 5000
+  default     = 3000
 }
 
-#############################
-# RDS VARIABLES
-#############################
 variable "rds_engine" {
   description = "Database Engine"
   type        = string
@@ -101,9 +90,6 @@ variable "rds_password" {
   default     = "Test12345!"
 }
 
-#############################
-# ROUTE53 VARIABLES
-#############################
 variable "domain_name" {
   description = "Hosted Zone domain name"
   type        = string

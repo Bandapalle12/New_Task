@@ -1,13 +1,9 @@
-#######################################
-#  AWS Provider
-#######################################
+
 provider "aws" {
   region = var.aws_region
 }
 
-#######################################
-#  Data Sources (Default VPC + Subnets)
-#######################################
+
 data "aws_vpc" "default" {
   default = true
 }
@@ -24,9 +20,6 @@ locals {
   public_subnets = data.aws_subnets.default_public.ids
 }
 
-#######################################
-#  EC2 MODULE
-#######################################
 module "ec2" {
   source = "./ec2"
 
@@ -36,9 +29,6 @@ module "ec2" {
   public_subnets = local.public_subnets
 }
 
-#######################################
-#  ECS MODULE
-#######################################
 module "ecs" {
   source = "./ecs"
 
@@ -48,9 +38,6 @@ module "ecs" {
 
 }
 
-#######################################
-#  RDS MODULE
-#######################################
 module "rds" {
   source = "./rds"
 
@@ -63,9 +50,7 @@ module "rds" {
 
 }
 
-#######################################
-#  ROUTE53 MODULE (Point DNS → EC2)
-#######################################
+
 module "route53" {
   source = "./route53"
 
