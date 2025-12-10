@@ -19,7 +19,7 @@ resource "aws_ecs_task_definition" "hello_task" {
     environment = [
       {
         name  = "RDS_HOST"
-        value = module.rds.db_endpoint
+        value = var.rds_host
       },
       {
         name  = "username"
